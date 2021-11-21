@@ -1,0 +1,21 @@
+{
+  "api": {
+    "musicrn": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 180,
+              "apiKeyExpirationDate": "2022-05-10T09:53:22.582Z",
+              "description": "musicapp"
+            }
+          },
+          "additionalAuthenticationProviders": []
+        }
+      }
+    }
+  }
+}

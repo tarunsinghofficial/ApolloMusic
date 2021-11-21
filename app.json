@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "Apollo",
+    "slug": "Apollo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/APOLLO.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/images/sound.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#a93aff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/APOLLO.png",
+        "backgroundColor": "#A96CE2"
+      },
+      "package": "com.GroupProject.Apollo"
+    },
+    "web": {
+      "favicon": "./assets/images/APOLLO.png"
+    },
+    "description": ""
+  }
+}
