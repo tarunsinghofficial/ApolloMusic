@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
-import { Text, Image, View, TouchableOpacity } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Text, Image, View, TouchableOpacity, Alert, Modal } from 'react-native';
 
 import styles from './styles';
 import { Song } from "../../types";
 import { AppContext } from '../../Appcontext';
+import { FontAwesome } from '@expo/vector-icons';
+
+
 
 export type SongListItemProps = {
   song: Song
@@ -16,6 +19,18 @@ const SongListItem = (props: SongListItemProps) => {
 
   const onPlay = () => {
     setSongId(song.id);
+  }
+
+
+  const [post, setPost] = useState(props.song.post);
+  const [isLiked, setIsLiked] = useState(false);
+
+  const onLikePress = () => {
+    const LikesToAdd = isLiked ? -1 : 1;
+    setPost({ ...song, likes: song.likes + LikesToAdd });
+    setIsLiked(!isLiked);
+    Alert.alert(isLiked ? 'Unliked' : 'Liked' );
+
   }
 
   return (
@@ -31,6 +46,19 @@ const SongListItem = (props: SongListItemProps) => {
           }}>{song.duration}</Text>
         </View>
         <Image source={{ uri: song.imageUri }} style={styles.image} />
+        <TouchableOpacity style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginRight: 10,
+        }}
+          onPress={onLikePress}
+        >
+          <FontAwesome
+            name={'heart'}
+            size={25}
+            color={isLiked ? 'red' : 'white'}
+          />
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   )

@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { FlatList, StyleSheet, View, StatusBar, Text, ScrollView, Image } from 'react-native';
+import { FlatList, StyleSheet, View, StatusBar, Text, ScrollView, Image, Pressable, TextInput } from 'react-native';
 import { useEffect, useState } from 'react';
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, Auth, graphqlOperation } from 'aws-amplify';
 
 import AlbumCategory from '../components/AlbumCategory';
 import { LinearGradient } from 'expo-linear-gradient';
 import { listAlbumCategorys } from '../src/graphql/queries';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import Animator from '../components/Animator';
 import RadioAnimator from '../components/RadioAnimator';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default function HomeScreen() {
@@ -39,6 +40,12 @@ export default function HomeScreen() {
   else if (hrs >= 17 && hrs <= 24)
     greet = 'Good Evening';
 
+
+  //Logout
+  const logout = () => {
+    Auth.signOut();
+  }
+
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#8400ff', '#2d067c', '#020024']}>
@@ -49,18 +56,26 @@ export default function HomeScreen() {
           backgroundColor: 'transparent',
           height: 60,
           flexDirection: 'row',
+          justifyContent: 'space-between',
         }}>
           <MaterialCommunityIcons name='home' size={30} color={'white'} style={{
             marginTop: 15,
             marginLeft: 20,
-            paddingRight: 10,
           }} />
           <Text style={{
             color: '#fff',
             marginTop: 18,
             fontSize: 20,
             fontWeight: 'bold',
-          }}>Home</Text>
+          }}>Apollo</Text>
+          <View style={{
+            flexDirection: 'row',
+            marginTop: 18,
+          }}>
+            <TouchableOpacity onPress={logout}>
+              <FontAwesome name='sign-out' size={30} color={'white'} style={{ marginRight: 10 }} />
+            </TouchableOpacity>
+          </View>
         </View>
         <ScrollView>
           <View style={{
@@ -81,6 +96,21 @@ export default function HomeScreen() {
           <View>
             <Text style={{ color: "white", marginBottom: 10, fontSize: 40, alignSelf: "center", fontWeight: "bold", fontFamily: "notoserif" }}>{greet}</Text>
           </View>
+          {/* <TouchableOpacity>
+            <LinearGradient colors={['#8400ff', '#865BDE', '#990EED']}
+              style={{
+                backgroundColor: '#9E42FA',
+                width: '30%',
+                height: 50,
+                borderRadius: 10,
+                marginTop: 30,
+                marginLeft: 15,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={{ color: '#fff', fontSize: 20 }}>Liked</Text>
+            </LinearGradient>
+          </TouchableOpacity> */}
           <FlatList
             data={categories}
             renderItem={({ item }) => (

@@ -11,6 +11,7 @@ import { RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import BottomTabNavigator from './BottomTabNavigator'
 import AudioProvider from '../app/context/AudioProvider';
+import LoginScreen from '../screens/LoginScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   
@@ -34,6 +35,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator({ navigation }) {
   return (
     <Stack.Navigator>
+      {/* <Stack.Screen name='LoginScreen' component={LoginScreen} options={{ headerShown: false}} /> */}
       <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
     </Stack.Navigator>

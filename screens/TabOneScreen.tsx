@@ -6,7 +6,6 @@ import { RootTabScreenProps } from '../types';
 //radio
 import { RadioBrowserApi } from 'radio-browser-api'
 import RadioCard from '../components/RadioCard';
-import Animator from '../components/Animator';
 import RadioAnimator from '../components/RadioAnimator';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {

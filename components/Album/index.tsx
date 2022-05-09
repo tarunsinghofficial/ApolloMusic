@@ -4,7 +4,8 @@ import {
  View, 
  Image, 
  Text, 
- TouchableWithoutFeedback } from 'react-native';
+ TouchableWithoutFeedback, 
+ TextInput} from 'react-native';
 import { Album } from '../../types';
 import styles from './styles';
 
@@ -19,6 +20,8 @@ const AlbumComponent = (props: AlbumProps) => {
     const onPress = () => {
         navigation.navigate('AlbumScreen',{id: props.album.id});
     }
+
+    
 
     return (
         <TouchableWithoutFeedback onPress={onPress}>

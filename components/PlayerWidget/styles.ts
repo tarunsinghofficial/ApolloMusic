@@ -51,7 +51,9 @@ const styles = StyleSheet.create({
     iconsContainer:{
     flexDirection: 'row',
     alignItems: "center",
-    right: 20
+    justifyContent: "space-between",
+    marginHorizontal: 10,
+    paddingHorizontal: 10,
     },
 
     title: {

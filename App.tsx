@@ -9,15 +9,19 @@ import Player from './app/screens/Player';
 
 
 //AWS details
-import Amplify from 'aws-amplify'
+import Amplify, { Auth } from 'aws-amplify';
 import config from './src/aws-exports'
 Amplify.configure(config)
+
+
+//Authentication from AWS
+import { withAuthenticator, AmplifyTheme } from 'aws-amplify-react-native'
 
 import { AppContext } from './Appcontext';
 
 
 
-export default function App() {
+function App() {
   const [playing, setPlaying] = useState(false);
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
@@ -46,3 +50,27 @@ export default function App() {
     );
   }
 }
+
+
+//customizing Theme of authentication
+
+const customTheme = {
+  ...AmplifyTheme,
+  button: {
+    ...AmplifyTheme.button,
+    backgroundColor: '#8400ff',
+    borderRadius: 50,
+  }, 
+  buttonDisabled: {
+    ...AmplifyTheme.buttonDisabled,
+    backgroundColor: '#8400ff80',
+    borderRadius: 50,
+  }, 
+  sectionFooterLink: {
+    ...AmplifyTheme.sectionFooterLink,
+    color: '#8400ff',
+  }
+}
+
+
+export default withAuthenticator(App, {theme: customTheme});

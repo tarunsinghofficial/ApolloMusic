@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, Image, View, TouchableOpacity } from 'react-native';
-import { FontAwesome } from "@expo/vector-icons";
+import { Text, Image, View, TouchableOpacity, Linking, Alert, Platform, PermissionsAndroid } from 'react-native';
+import { AntDesign, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { API, graphqlOperation } from 'aws-amplify';
 import AudioNotification from "react-native-audio-notification";
+import RNFetchBlob from 'rn-fetch-blob';
 
 import styles from './styles';
 import { Sound } from "expo-av/build/Audio/Sound";
@@ -68,16 +69,6 @@ const PlayerWidget = () => {
     setSound(newSound)
   }
 
-
-
-  /* const setNotifications = () => {
-    MusicControl.setNowPlaying({
-      title: song.title,
-      artwork: song.imageUri,
-      artist: song.artistsHeadline
-    })
-  } */
-
   useEffect(() => {
     if (song) {
       playCurrentSong();
@@ -112,6 +103,79 @@ const PlayerWidget = () => {
     return null;
   }
 
+  
+  const fileUrl = song.uri;
+  const onDownload = async () => {
+    
+      // Function to check the platform
+      // If Platform is Android then check for permissions.
+   
+      if (Platform.OS === 'ios') {
+        downloadFile();
+      } else {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            // Start downloading
+            downloadFile();
+            console.log('Storage Permission Granted.');
+          } else {
+            // If permission denied then show alert
+            Alert.alert('Error','Storage Permission Not Granted');
+          }
+        } catch (err) {
+          // To handle permission related exception
+          console.log("++++"+err);
+        }
+      }
+    };
+   
+    const downloadFile = () => {
+     
+      // Get today's date to add the time suffix in filename
+      let date = new Date();
+      // File URL which we want to download
+      let FILE_URL = fileUrl;    
+      // Function to get extention of the file url
+      let file_ext = getFileExtention(FILE_URL);
+     
+      file_ext = '.' + file_ext[0];
+     
+      // config: To get response by passing the downloading related options
+      // fs: Root directory path to download
+      const { config, fs } = RNFetchBlob;
+      let RootDir = fs.dirs.PictureDir;
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          path:
+            RootDir+
+            '/file_' + 
+            Math.floor(date.getTime() + date.getSeconds() / 2) +
+            file_ext,
+          description: 'downloading file...',
+          notification: true,
+          // useDownloadManager works with Android only
+          useDownloadManager: true,   
+        },
+      };
+      config(options)
+        .fetch('GET', FILE_URL)
+        .then(res => {
+          // Alert after successful downloading
+          console.log('res -> ', JSON.stringify(res));
+          Alert.alert('File Downloaded Successfully.');
+        });
+    };
+   
+    const getFileExtention = fileUrl => {
+      // To get the file extension
+      return /[.]/.exec(fileUrl) ?
+               /[^.]+$/.exec(fileUrl) : undefined;
+    };
+  
 
   return (
     <View style={styles.container}>
@@ -125,7 +189,10 @@ const PlayerWidget = () => {
           </View>
           <View style={styles.iconsContainer}>
             <TouchableOpacity onPress={onPlayPausePress}>
-              <FontAwesome name={isPlaying ? 'pause' : 'play'} size={30} color={"white"} />
+              <FontAwesome name={isPlaying ? 'pause' : 'play'} size={30} color={"white"} style={{paddingRight: 20}} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onDownload}>
+              <AntDesign name={'clouddownload'} size={30} color={"white"} />
             </TouchableOpacity>
           </View>
         </View>
